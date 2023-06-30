@@ -1,0 +1,108 @@
+// Copyright (C) 1991-2013 Altera Corporation
+// Your use of Altera Corporation's design tools, logic functions 
+// and other software and tools, and its AMPP partner logic 
+// functions, and any output files from any of the foregoing 
+// (including device programming or simulation files), and any 
+// associated documentation or information are expressly subject 
+// to the terms and conditions of the Altera Program License 
+// Subscription Agreement, Altera MegaCore Function License 
+// Agreement, or other applicable license agreement, including, 
+// without limitation, that your use is for the sole purpose of 
+// programming logic devices manufactured by Altera and sold by 
+// Altera or its authorized distributors.  Please refer to the 
+// applicable agreement for further details.
+
+// *****************************************************************************
+// This file contains a Verilog test bench template that is freely editable to  
+// suit user's needs .Comments are provided in each section to help the user    
+// fill out necessary details.                                                  
+// *****************************************************************************
+// Generated on "06/30/2023 16:18:16"
+                                                                                
+// Verilog Test Bench template for design : FPDiv
+// 
+// Simulation tool : ModelSim-Altera (Verilog)
+// 
+
+`timescale 1 us/ 1 us
+module FPDiv_vlg_tst();
+// constants                                           
+// general purpose registers
+reg eachvec;
+// test vector input registers
+reg clk;
+reg clk_en;
+reg [31:0] dividend;
+reg [31:0] divisor;
+reg n_reset;
+reg ready_tst;
+// wires                                               
+wire division_by_zero;
+wire [31:0]  quotient;
+wire ready_out;
+
+reg [31:0] counter, counter1;
+// assign statements (if any)                          
+FPDiv i1 (
+// port map - connection between master ports and signals/registers   
+	.clk(clk),
+	.clk_en(clk_en),
+	.dividend(dividend),
+	.division_by_zero(division_by_zero),
+	.divisor(divisor),
+	.n_reset(n_reset),
+	.quotient(quotient),
+	.ready_out(ready_out)
+);
+initial                                                
+begin                                                  
+// code that executes only once                        
+// insert code here --> begin                          
+dividend <= 0;
+divisor <= 0;
+n_reset <= 1'b0;
+clk_en <= 1'b0;
+#40 n_reset <= 1'b1;
+clk <= 1'b0;
+counter <= 0;
+counter1 <= 0;
+ready_tst <= 1'b0;
+forever
+		#5 clk <= ~clk;
+// --> end                                             
+                       
+end        
+
+                                            
+always @(posedge clk)                                                
+// optional sensitivity list                           
+// @(event1 or event2 or .... eventn)                  
+begin                                                  
+// code executes for every event on sensitivity list   
+// insert code here --> begin                          
+        counter <= counter + 1;
+		  if(counter == 30) begin
+				clk_en <= 1'b1;
+				divisor <= 32'hC8200000;
+				dividend <= 32'hC0400000;
+				ready_tst <= 1'b0;
+			end
+			else if(counter ==45)
+			begin
+				clk_en <= 1'b0;
+			end	
+			else
+				if(counter == 60) begin
+				clk_en <= 1'b1;
+				divisor <= 32'hC0400000;
+				dividend <= 32'hC8200000;
+				ready_tst <= 1'b0;
+			end
+			else if(counter ==75)
+			begin
+				clk_en <= 1'b0;
+			end
+// --> end                                             
+end                                                    
+endmodule
+
